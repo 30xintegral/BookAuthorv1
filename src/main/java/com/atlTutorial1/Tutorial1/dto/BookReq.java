@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookReq {
-    private String name;
+    private String bookName;
     private String isbn;
     private String language;
     private LocalDate publishedAt;

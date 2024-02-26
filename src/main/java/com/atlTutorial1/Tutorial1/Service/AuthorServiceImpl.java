@@ -8,15 +8,14 @@ import com.atlTutorial1.Tutorial1.dto.AuthorDto;
 import com.atlTutorial1.Tutorial1.dto.AuthorReq;
 import com.atlTutorial1.Tutorial1.dto.BookDto;
 import com.atlTutorial1.Tutorial1.dto.BookReq;
+import com.atlTutorial1.Tutorial1.mapper.AuthorMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +25,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class AuthorServiceImpl implements AuthorService{
+
 
     AuthorRepository authorRepository;
     @Autowired
@@ -55,7 +55,9 @@ public class AuthorServiceImpl implements AuthorService{
             bookDto.setPublishedAt(book.getPublishedAt());
             bookDtoList.add(bookDto);
         }
-        AuthorDto authorDto = new AuthorDto(author.getId(), author.getName(), author.getSurname(), author.getEmail(), author.getAge(), author.getBirthdate(), author.getProfilePhotoURL() ,bookDtoList);
+        AuthorDto authorDto =
+//                AuthorMapper.INSTANCE.mapEntityToDto(author); //book map etmedi deyesen
+                new AuthorDto(author.getId(), author.getName(), author.getSurname(), author.getEmail(), author.getAge(), author.getBirthdate(), author.getProfilePhotoURL() ,bookDtoList);
         return authorDto;
     }
 
@@ -91,10 +93,11 @@ public class AuthorServiceImpl implements AuthorService{
 
             for (BookReq bookReq: authorReq.getBookReqs()) {
                 Book book1 = new Book();
-                book1.setName(bookReq.getName());
+                book1.setName(bookReq.getBookName());
                 book1.setIsbn(bookReq.getIsbn());
                 book1.setLanguage(bookReq.getLanguage());
                 book1.setPublishedAt(bookReq.getPublishedAt());
+
                 book1.setAuthor(author);
             }
 
@@ -102,11 +105,11 @@ public class AuthorServiceImpl implements AuthorService{
 
 
             authorRepository.save(author);
-            return "Photo uploaded";
+            return "Uploaded";
         } catch (IOException e) {
             throw new RuntimeException(e + "IOException");
         }catch (RuntimeException e){
-            throw new RuntimeException("Photo damaged or smth");
+            throw new RuntimeException("Runtime Exception");
         }
 
     }

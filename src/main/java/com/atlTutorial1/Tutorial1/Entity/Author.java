@@ -29,7 +29,7 @@ public class Author {
     private int age;
     private LocalDate birthdate;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();
 
     @Column(unique = true)
