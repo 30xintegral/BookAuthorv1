@@ -35,6 +35,11 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+	implementation group : 'org.hibernate.validator',name :
+			'hibernate-validator', version: '6.2.0.Final'
+
+	implementation group: 'org.springframework.boot', name:
+			'spring-boot-starter-validation', version: '2.6.7'
 
 }
 

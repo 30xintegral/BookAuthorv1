@@ -1,6 +1,7 @@
 package com.atlTutorial1.Tutorial1.dto;
 
 import com.atlTutorial1.Tutorial1.Entity.Book;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class AuthorReq {
 
     private String surname;
 
+    @Email(message = "Incorrect Email")
     private String email;
 
     private int age;

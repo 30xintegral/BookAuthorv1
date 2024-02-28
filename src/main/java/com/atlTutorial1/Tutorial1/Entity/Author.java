@@ -1,6 +1,7 @@
 package com.atlTutorial1.Tutorial1.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +19,14 @@ public class Author {
     private Long id;
 
     @Column(length = 25, nullable = false)
+
     private String name;
 
     @Column(length = 45,nullable = false)
     private String surname;
 
     @Column(unique = true)
+    @Email
     private String email;
 
     private int age;
