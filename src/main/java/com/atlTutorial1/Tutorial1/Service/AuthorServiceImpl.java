@@ -56,8 +56,10 @@ public class AuthorServiceImpl implements AuthorService{
             bookDtoList.add(bookDto);
         }
         AuthorDto authorDto =
-//                AuthorMapper.INSTANCE.mapEntityToDto(author); //book map etmedi deyesen
-                new AuthorDto(author.getId(), author.getName(), author.getSurname(), author.getEmail(), author.getAge(), author.getBirthdate(), author.getProfilePhotoURL() ,bookDtoList);
+                AuthorMapper.INSTANCE.mapEntityToDto(author); //book map etmedi deyesen
+        authorDto.setAuthorPPUrl("static/" + author.getProfilePhotoURL());
+        authorDto.setBookList(bookDtoList);
+
         return authorDto;
     }
 

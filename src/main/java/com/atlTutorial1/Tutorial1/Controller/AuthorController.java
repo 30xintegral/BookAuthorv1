@@ -5,6 +5,7 @@ import com.atlTutorial1.Tutorial1.Service.AuthorService;
 import com.atlTutorial1.Tutorial1.Service.BookService;
 import com.atlTutorial1.Tutorial1.dto.AuthorDto;
 import com.atlTutorial1.Tutorial1.dto.AuthorReq;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +44,7 @@ public class AuthorController {
     }
 
     @PostMapping("/register")
-    public String saveAuthor(@ModelAttribute AuthorReq authorReq, @RequestParam("file") MultipartFile authorPP){
+    public String saveAuthor(@Valid @ModelAttribute AuthorReq authorReq, @RequestParam("file") MultipartFile authorPP){
         log.info("saveAuthor called ");
         return authorService.saveAuthor(authorReq, authorPP);
     }
