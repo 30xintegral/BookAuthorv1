@@ -9,8 +9,8 @@ import com.atlTutorial1.Tutorial1.dto.AuthorReq;
 import com.atlTutorial1.Tutorial1.dto.BookDto;
 import com.atlTutorial1.Tutorial1.dto.BookReq;
 import com.atlTutorial1.Tutorial1.mapper.AuthorMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,25 +24,18 @@ import java.util.List;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class AuthorServiceImpl implements AuthorService{
 
 
-    AuthorRepository authorRepository;
-    @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
+    private final AuthorRepository authorRepository;
 
+    private final BookRepository bookRepository;
 
-    BookRepository bookRepository;
-    @Autowired
-    public void setBookRepository(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
 
     @Override
     public AuthorDto getAuthorById(Long id) {
-        Author author = authorRepository.getAuthorById(id);
+        Author author = authorRepository.findAuthorById(id).orElseThrow(() -> new RuntimeException("No such author found by given id"));
         List<Book> bookList = bookRepository.findBooksByAuthorId(id);
         List<BookDto> bookDtoList = new ArrayList<>();
         for (Book book: bookList
@@ -65,11 +58,9 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public AuthorDto getAuthorByBookId(Long bookId) {
-        Book book = bookRepository.getBookById(bookId);
-        if (book==null){
-            throw new RuntimeException("No such book found by id");
-        }
-        Author author = authorRepository.getAuthorByBookId(bookId);
+        Book book = bookRepository.findBookById(bookId).orElseThrow(()-> new RuntimeException("Book not found by given id"));
+
+        Author author = authorRepository.findAuthorByBookId(bookId).orElseThrow(()-> new RuntimeException("Nu such author found by given book id"));
         if (author==null){
             throw new RuntimeException("No such author wrote that book");
         }
@@ -118,12 +109,12 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public String updateAuthorById(Long authorId, AuthorReq authorReq, MultipartFile authorPP) {
-        Author author = authorRepository.getAuthorById(authorId);
+        Author author = authorRepository.findAuthorById(authorId).orElseThrow(()-> new RuntimeException("no such author found by given id"));
 
         String fileName = authorPP.getOriginalFilename();
-        if (author==null){
-            throw new RuntimeException("Author not found");
-        }
+//        if (author==null){
+//            throw new RuntimeException("Author not found");
+//        }
         try {
             author.setName(authorReq.getName());
             author.setSurname(authorReq.getSurname());
@@ -140,5 +131,28 @@ public class AuthorServiceImpl implements AuthorService{
         authorRepository.save(author);
         return "Updating done";
 
+    }
+
+    @Override
+    public AuthorDto getAuthorByEmail(String email) {
+        Author author = authorRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("No such author found"));
+        List<Book> bookList = bookRepository.findBooksByAuthorId(author.getId());
+        List<BookDto> bookDtoList = new ArrayList<>();
+        for (Book book: bookList
+        ) {
+            BookDto bookDto = new BookDto();
+            bookDto.setId(book.getId());
+            bookDto.setName(book.getName());
+            bookDto.setIsbn(book.getIsbn());
+            bookDto.setLanguage(book.getLanguage());
+            bookDto.setPublishedAt(book.getPublishedAt());
+            bookDtoList.add(bookDto);
+        }
+        AuthorDto authorDto =
+                AuthorMapper.INSTANCE.mapEntityToDto(author); //book map etmedi deyesen
+        authorDto.setAuthorPPUrl("static/" + author.getProfilePhotoURL());
+        authorDto.setBookList(bookDtoList);
+
+        return authorDto;
     }
 }

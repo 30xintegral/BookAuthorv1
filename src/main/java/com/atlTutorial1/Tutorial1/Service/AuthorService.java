@@ -17,6 +17,6 @@ public interface AuthorService {
 
     String updateAuthorById(Long authorId, AuthorReq authorReq, MultipartFile authorPP);
 
-
+    AuthorDto getAuthorByEmail(String email);
 
 }

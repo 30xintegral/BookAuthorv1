@@ -11,17 +11,18 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
-    Author getAuthorById(Long id);
+    Optional<Author> findAuthorById(Long id);
 
     @Query(value = "select a.* from author a where a.id in (select id from books where id=:id)", nativeQuery = true)
-    Author getAuthorByBookId(@Param(value = "id") Long bookId);
+    Optional<Author> findAuthorByBookId(@Param(value = "id") Long bookId);
 
 
 //    @Modifying
 //    void updateAuthorById(Long id, AuthorReq authorReq, String authorPP);
 
-
+    Optional<Author> findByEmail(String email);
 }

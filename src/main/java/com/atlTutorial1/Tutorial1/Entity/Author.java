@@ -2,8 +2,7 @@ package com.atlTutorial1.Tutorial1.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,7 +11,9 @@ import java.util.List;
 @Entity
 @Table(name = "authors")
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +38,8 @@ public class Author {
 
     @Column(unique = true)
     private String profilePhotoURL;
+
+    private Role role;
 
 
 }

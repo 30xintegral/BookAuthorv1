@@ -34,6 +34,7 @@ public class AuthorController {
 
     @GetMapping("/author")
     AuthorDto getAuthor(@RequestParam Long id){
+        log.info("called");
         return authorService.getAuthorById(id);
     }
 

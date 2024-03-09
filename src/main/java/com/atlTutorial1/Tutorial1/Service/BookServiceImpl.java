@@ -7,11 +7,13 @@ import com.atlTutorial1.Tutorial1.Repository.BookRepository;
 import com.atlTutorial1.Tutorial1.dto.AuthorDto;
 import com.atlTutorial1.Tutorial1.dto.BookDto;
 import com.atlTutorial1.Tutorial1.dto.BookReq;
+import com.atlTutorial1.Tutorial1.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -48,4 +50,8 @@ public class BookServiceImpl implements BookService{
         return bookList;
     }
 
+    @Override
+    public List<BookDto> getAllBooks() {
+        return bookRepository.findAll().stream().map(BookMapper.INSTANCE::mapEntityToDto).collect(Collectors.toList());
+    }
 }
