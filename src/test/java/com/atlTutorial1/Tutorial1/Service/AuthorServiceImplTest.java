@@ -6,6 +6,7 @@ import com.atlTutorial1.Tutorial1.Repository.AuthorRepository;
 import com.atlTutorial1.Tutorial1.Repository.BookRepository;
 import com.atlTutorial1.Tutorial1.dto.AuthorDto;
 import com.atlTutorial1.Tutorial1.dto.AuthorReq;
+import com.atlTutorial1.Tutorial1.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -76,14 +77,14 @@ class AuthorServiceImplTest {
         //act & assert
 
         assertThatThrownBy(
-                ()->authorService.getAuthorById(1L)).isInstanceOf(RuntimeException.class).hasMessage("No such author found by given id");
+                ()->authorService.getAuthorById(1L)).isInstanceOf(NotFoundException.class).hasMessage("No such author found by given id");
     }
     @Test
     public void givenGetAuthorByIdWhenAuthorFoundAndBookNotFoundThenThrowException(){
         when(authorRepository.findAuthorById(anyLong())).thenReturn(Optional.of(new Author()));
-        when(bookRepository.findBooksByAuthorId(anyLong())).thenThrow(new RuntimeException());
+        when(bookRepository.findBooksByAuthorId(anyLong())).thenThrow(new NotFoundException());
 
-        assertThatThrownBy(()-> authorService.getAuthorById(1L)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(()-> authorService.getAuthorById(1L)).isInstanceOf(NotFoundException.class);
     }
 
     @Test

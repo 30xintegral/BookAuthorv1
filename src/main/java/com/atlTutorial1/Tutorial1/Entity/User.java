@@ -1,9 +1,11 @@
 package com.atlTutorial1.Tutorial1.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "users_v2")
+@Data
 public class User {
 
     @Id

@@ -8,6 +8,7 @@ import com.atlTutorial1.Tutorial1.dto.AuthorDto;
 import com.atlTutorial1.Tutorial1.dto.AuthorReq;
 import com.atlTutorial1.Tutorial1.dto.BookDto;
 import com.atlTutorial1.Tutorial1.dto.BookReq;
+import com.atlTutorial1.Tutorial1.exception.NotFoundException;
 import com.atlTutorial1.Tutorial1.mapper.AuthorMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public AuthorDto getAuthorById(Long id) {
-        Author author = authorRepository.findAuthorById(id).orElseThrow(() -> new RuntimeException("No such author found by given id"));
+        Author author = authorRepository.findAuthorById(id).orElseThrow(() -> new NotFoundException("No such author found by given id"));
         List<Book> bookList = bookRepository.findBooksByAuthorId(id);
         List<BookDto> bookDtoList = new ArrayList<>();
         for (Book book: bookList
@@ -58,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public AuthorDto getAuthorByBookId(Long bookId) {
-        Book book = bookRepository.findBookById(bookId).orElseThrow(()-> new RuntimeException("Book not found by given id"));
+        Book book = bookRepository.findBookById(bookId).orElseThrow(()-> new NotFoundException("Book not found by given id"));
 
         Author author = authorRepository.findAuthorByBookId(bookId).orElseThrow(()-> new RuntimeException("Nu such author found by given book id"));
         if (author==null){
@@ -109,7 +110,7 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public String updateAuthorById(Long authorId, AuthorReq authorReq, MultipartFile authorPP) {
-        Author author = authorRepository.findAuthorById(authorId).orElseThrow(()-> new RuntimeException("no such author found by given id"));
+        Author author = authorRepository.findAuthorById(authorId).orElseThrow(()-> new NotFoundException("no such author found by given id"));
 
         String fileName = authorPP.getOriginalFilename();
 //        if (author==null){

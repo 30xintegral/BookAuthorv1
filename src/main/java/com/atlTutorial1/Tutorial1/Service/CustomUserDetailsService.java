@@ -5,6 +5,7 @@ import com.atlTutorial1.Tutorial1.Entity.User;
 import com.atlTutorial1.Tutorial1.Repository.AuthorRepository;
 import com.atlTutorial1.Tutorial1.Repository.UserRepository;
 import com.atlTutorial1.Tutorial1.security.UserPrincipal;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,14 +19,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private AuthorRepository authorRepository;
-
+    private final UserRepository userRepository;
+    private final AuthorRepository authorRepository;
 
 
     @Override
