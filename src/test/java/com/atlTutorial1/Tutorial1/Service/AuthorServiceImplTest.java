@@ -10,8 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.opentest4j.FileInfo;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -113,25 +123,35 @@ class AuthorServiceImplTest {
     }
 
     @Test
-    public void givenUpdateAuthorByIdWhenAuthorFoundThenReturnNothing(){
-        AuthorReq authorReq = AuthorReq.builder()
-                .name("Test")
-                .surname("Testov")
-                .email("Test@gmail.com")
-                .birthdate(LocalDate.now())
-                .build();
+    public void givenUpdateAuthorByIdWhenAuthorFoundThenReturnNothing() throws IOException {
+        AuthorReq authorReq = Mockito.mock(AuthorReq.class);
+        Author author = Mockito.mock(Author.class);
 
-        Author author = Author.builder()
-                .id(1L)
-                .name("Test")
-                .surname("Testov")
-                .age(20)
-                .email("Test@gmail.com")
-//                .books(List.of(new Book()))
-                .build();
+
+
+        MockMultipartFile file = new MockMultipartFile("file", new byte[0]);
+
         when(authorRepository.findAuthorById(anyLong())).thenReturn(Optional.of(author));
+//        when(Files.copy(file.getInputStream(), Path.of(new ClassPathResource("static").getURI()).resolve(file.getOriginalFilename()))).thenReturn(any());
+
+
+        String result = authorService.updateAuthorById(1L, authorReq, file);
 
         verify(authorRepository, times(1)).save(any());
         //error aliriq
+    }
+
+    @Test
+    public void givenGetAuthorByEmailWhenAuthorFoundAndBookFoundThenReturn(){
+        Author author = mock(Author.class);
+        Book book = mock(Book.class);
+        AuthorDto authorDto;
+
+        when(authorRepository.findByEmail(anyString())).thenReturn(Optional.of(author));
+        when(bookRepository.findBooksByAuthorId(anyLong())).thenReturn(List.of(book));
+
+        authorDto = authorService.getAuthorByEmail(anyString());
+
+        assertNotNull(authorDto);
     }
 }

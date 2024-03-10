@@ -121,7 +121,6 @@ public class AuthorServiceImpl implements AuthorService{
             author.setAge(authorReq.getAge());
             author.setEmail(authorReq.getEmail());
             author.setBirthdate(authorReq.getBirthdate());
-            //need to be developed
             Files.copy(authorPP.getInputStream(), Paths.get(new ClassPathResource("static").getURI()).resolve(authorPP.getOriginalFilename()));
             author.setProfilePhotoURL(authorPP.getOriginalFilename());
         }catch (java.io.IOException e){
