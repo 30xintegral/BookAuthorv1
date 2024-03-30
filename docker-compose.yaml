@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD : 1234
+    ports:
+      - "5432:5432"
+
+  tutorial1:
+    build:
+      context: .
+    image: 30xintegral/mel_docker
+    container_name: tutorial1
+    network_mode: host
+    ports:
+      - "8088:8081"
+    depends_on:
+      - postgres
